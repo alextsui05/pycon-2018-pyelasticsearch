@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+import elasticsearch.helpers
 
 from searchapp.constants import DOC_TYPE, INDEX_NAME
 from searchapp.data import all_products, ProductData
@@ -17,8 +18,12 @@ def main():
         },
     )
 
-    for product in all_products():
-        index_product(es, product)
+    # Index products one by one
+    #for product in all_products():
+    #    index_product(es, product)
+
+    # Index products in bulk
+    elasticsearch.helpers.bulk(es, actions_from_products())
 
 
 def index_product(es, product: ProductData):
@@ -38,6 +43,18 @@ def index_product(es, product: ProductData):
     # or if it has stalled.
     print("Indexed {}".format(product.name))
 
+def actions_from_products():
+    for product in all_products():
+        yield {
+                '_op_type': 'index',
+                '_index': INDEX_NAME,
+                '_type': DOC_TYPE,
+                '_id': product.id,
+                '_source': {
+                    "name": product.name,
+                    "image": product.image
+                    }
+                }
 
 if __name__ == '__main__':
     main()
