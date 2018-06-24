@@ -13,7 +13,21 @@ def main():
     es.indices.create(
         index=INDEX_NAME,
         body={
-            'mappings': {},
+            'mappings': {
+                DOC_TYPE: {                                # This mapping applies to products.
+                    'properties': {                        # Just a magic word.
+                        'name': {                          # The field we want to configure.
+                            'type': 'text',                # The kind of data we’re working with.
+                            'fields': {                    # create an analyzed field.
+                                'english_analyzed': {      # Name that field `name.english_analyzed`.
+                                    'type': 'text',        # It’s also text.
+                                    'analyzer': 'english', # And here’s the analyzer we want to use.
+                                    }
+                                }
+                            }
+                        }
+                    }
+            },
             'settings': {},
         },
     )
