@@ -21,7 +21,7 @@ def main():
                             'fields': {                    # create an analyzed field.
                                 'english_analyzed': {      # Name that field `name.english_analyzed`.
                                     'type': 'text',        # It’s also text.
-                                    'analyzer': 'english', # And here’s the analyzer we want to use.
+                                    'analyzer': 'custom_english_analyzer', # And here’s the analyzer we want to use.
                                     }
                                 }
                             }
